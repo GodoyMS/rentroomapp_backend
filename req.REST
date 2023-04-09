@@ -1,0 +1,29 @@
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{    
+    "email":"peruvalmundial@gmail.com",
+    "password":"liamg31072001",
+
+}
+###
+GET  http://localhost:4000/profile
+Content-Type: application/json
+
+###
+
+PUT http://localhost:5500/api/item/63df1dd16b637076884819c1
+Content-Type: application/json
+
+{
+    "item":"this is the firs item but updated !!",
+    "completed":true
+}
+
+
+###
+
+DELETE http://localhost:5500/api/item/63df1dd16b637076884819c1
+Content-Type: application/json
+
+

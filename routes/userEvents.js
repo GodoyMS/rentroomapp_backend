@@ -11,13 +11,14 @@ const fs = require('fs');
 const dotenv=require('dotenv').config();
 
 const router = require('express').Router();
-const jwtSecret = process.env.jwtSecret
-
+const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg'
+const tokenValue='w4r5r3wq45wdfgw34';
+const options = { expiresIn: '1h' };
 
 
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
-      jwt.verify(req.cookies.token, jwtSecret, {}, async (err, decodedUserData) => {
+      jwt.verify(tokenValue, jwtSecret, {}, async (err, decodedUserData) => {
         if (err) throw err;
         resolve(decodedUserData);
       });
@@ -28,16 +29,14 @@ function getUserDataFromReq(req) {
   //Get user information
   router.get('/profile', (req,res) => {
 
-    const {token} = req.cookies;
-    if (token) {
-      jwt.verify(token, jwtSecret, {}, async (err, decodedUserData) => {
-        if (err) throw err;
-        const {name,email,shortDescription,_id} = await User.findById(decodedUserData.id);
-        res.json({name,email,shortDescription,_id});
+    
+      jwt.verify(tokenValue, jwtSecret, {}, async (err, decodedToken) => {
+        if (err) { return res.status(401).json({ error: 'Authorization failed: Invalid token' })}
+        const { user, tokenValue } = decodedToken;
+        const {name,email,shortDescription,_id} = await User.findById(user.id);
+        res.status(200).json({name,email,shortDescription,_id});
       });
-    } else {
-      res.json(null);
-    }
+    
   });
 
 

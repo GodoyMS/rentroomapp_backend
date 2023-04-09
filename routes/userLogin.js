@@ -6,7 +6,9 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 const dotenv=require('dotenv').config();
 
 
-const jwtSecret = process.env.jwtSecret
+const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg'
+const tokenValue='w4r5r3wq45wdfgw34';
+const options = { expiresIn: '1h' };
 
 //Test
 router.get('/test', (req,res) => {
@@ -37,20 +39,15 @@ router.post('/login', async (req,res) => {
   const {email,password} = req.body;
   const userDoc = await User.findOne({email});
   if (userDoc) {
+    const user={email:userDoc.email, id:userDoc._id, name:userDoc.name}
     const passOk = bcrypt.compareSync(password, userDoc.password);
     console.log(userDoc)
     if (passOk) {
-      jwt.sign({
-        email:userDoc.email,
-        id:userDoc._id,
-        name:userDoc.name
-      }, jwtSecret, {}, (err,token) => {
+      jwt.sign({user,tokenValue}, jwtSecret, options, (err,token) => {
         if (err) throw err;
-        res.cookie('token', token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 1000, // 1 hour
-        }).json(userDoc);
-        
+        res.cookie('token', token, { httpOnly: true});
+        res.json(userDoc);
+
       });
     } else {  
       res.status(422).json('pass not ok');

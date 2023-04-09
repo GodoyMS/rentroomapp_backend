@@ -190,7 +190,7 @@ function getUserDataFromReq(req) {
 
   //Post a favorite rentplace by user
   router.post('/account/postfavorite', async (req, res) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Credentials', true);
     
     // Set other headers and return the response

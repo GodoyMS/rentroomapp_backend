@@ -28,13 +28,18 @@ function getUserDataFromReq(req) {
 
   //Get user information
   router.get('/profile', (req,res) => {
+    const token = req.cookies.token;
+
+      if (!token) {
+        return res.status(401).send('Unauthorized');
+      }
 
     
-      jwt.verify(tokenValue, jwtSecret, {}, async (err, decodedToken) => {
+      jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
         if (err) { return res.status(401).json({ error: 'Authorization failed: Invalid token' })}
-        const { user, tokenValue } = decodedToken;
-        const {name,email,shortDescription,_id} = await User.findById(user.id);
-        res.status(200).json({name,email,shortDescription,_id});
+        const {name,email,shortDescription,_id} = await User.findById(decodedUser.id);
+        
+        return res.status(200).json({name:name,email:email,shortDescription:shortDescription,_id:_id});
       });
     
   });

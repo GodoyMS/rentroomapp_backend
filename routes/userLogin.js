@@ -39,13 +39,14 @@ router.post('/login', async (req,res) => {
   const {email,password} = req.body;
   const userDoc = await User.findOne({email});
   if (userDoc) {
-    const user={email:userDoc.email, id:userDoc._id, name:userDoc.name}
     const passOk = bcrypt.compareSync(password, userDoc.password);
     console.log(userDoc)
     if (passOk) {
-      jwt.sign({user,tokenValue}, jwtSecret, options, (err,token) => {
-        if (err) throw err;
-        res.cookie('token', token, { httpOnly: true});
+      jwt.sign({email:userDoc.email, id:userDoc._id, name:userDoc.name}, jwtSecret, options, (err,token) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to generate token' });
+        }        
+        res.cookie('token', token, { httpOnly: true});        
         res.json(userDoc);
 
       });

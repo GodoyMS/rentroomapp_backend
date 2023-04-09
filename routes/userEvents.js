@@ -190,6 +190,12 @@ function getUserDataFromReq(req) {
 
   //Post a favorite rentplace by user
   router.post('/account/postfavorite', async (req, res) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Credentials', true);
+    
+    // Set other headers and return the response
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET, POST');
     const userData = await getUserDataFromReq(req);
     const {
       rentPlace,name,monthlyPrice,

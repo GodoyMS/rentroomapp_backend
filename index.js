@@ -5,8 +5,8 @@ const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app=express();
 app.use(cors({
-        origin: "http://localhost:3000",
-        credentials: 'include',
+        origin:'http://localhost:3000',
+        credentials: true,
         optionsSuccessStatus: 200,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));

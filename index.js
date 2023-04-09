@@ -11,11 +11,7 @@ app.use(cookieParser());
 //Define a route for uploading images
 app.use('/uploads', express.static(__dirname+'/uploads'));
 
-//Use cors to allow requests from diff url
-app.use(cors({
-  credentials: true,
-  origin: true,
-}));
+
 
 //Database MONGODB with mongoose
 mongoose.connect(process.env.MONGO_URL,{

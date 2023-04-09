@@ -46,9 +46,13 @@ router.post('/login', async (req,res) => {
         name:userDoc.name
       }, jwtSecret, {}, (err,token) => {
         if (err) throw err;
-        res.cookie('token', token).json(userDoc);
+        res.cookie('token', token, {
+          httpOnly: true,
+          maxAge: 60 * 60 * 1000, // 1 hour
+        }).json(userDoc);
+        
       });
-    } else {
+    } else {  
       res.status(422).json('pass not ok');
     }
   } else {

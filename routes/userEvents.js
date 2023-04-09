@@ -27,11 +27,7 @@ function getUserDataFromReq(req) {
 
   //Get user information
   router.get('/profile', (req,res) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-  
-  // Set other headers and return the response
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET, POST');
+
     const {token} = req.cookies;
     if (token) {
       jwt.verify(token, jwtSecret, {}, async (err, decodedUserData) => {

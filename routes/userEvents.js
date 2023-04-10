@@ -17,7 +17,7 @@ const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg'
 
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
-      jwt.verify(req.cookies.token, jwtSecret, {}, async (err, decodedUserData) => {
+      jwt.verify("token123", jwtSecret, {}, async (err, decodedUserData) => {
         if (err) throw err;
         resolve(decodedUserData);
       });
@@ -27,18 +27,13 @@ function getUserDataFromReq(req) {
 
   //Get user information
   router.get('/profile', async (req,res) => {
-    const token = await req.cookies.token;
-
-      if (token) {
-        jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
+    
+        jwt.verify("token123", jwtSecret, {}, async (err, decodedUser) => {
           if (err) { return res.json({ error: 'Authorization failed: Invalid token' })}
           const {name,email,shortDescription,_id} = await User.findById(decodedUser.id);        
           res.json({name,email,shortDescription,_id,token:token});
         });
-        }else{
-          res.json('Unauthorized from profile endpoint')
-
-      }
+        
           
        
     
@@ -50,7 +45,7 @@ function getUserDataFromReq(req) {
       const {token} = req.cookies;
       const {name,email,shortDescription} = req.body;
       console.log(req.body);
-      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      jwt.verify("token123", jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
 
         const userDoc = await User.findOne({email:email})
@@ -112,7 +107,7 @@ function getUserDataFromReq(req) {
   //Get all rentplaces by user
   router.get('/user-rentplaces', (req,res) => {
     const {token} = req.cookies;
-    jwt.verify(token, jwtSecret, {}, async (err, decodedUserData) => {
+    jwt.verify("token123", jwtSecret, {}, async (err, decodedUserData) => {
       const {id} = decodedUserData;
       console.log(decodedUserData)
       res.json( await RentPlace.find({owner:id}) );
@@ -127,7 +122,7 @@ function getUserDataFromReq(req) {
       title,country,region,address,addedPhotos,description,
       perks,extraInfo,maxPeople,monthlyPrice
     } = req.body;
-    jwt.verify(token, jwtSecret, {}, async (err, decodedUserData) => {
+    jwt.verify("token123", jwtSecret, {}, async (err, decodedUserData) => {
       if (err) throw err;
       const placeDoc = await RentPlace.create({
         owner:decodedUserData.id,ownerName:decodedUserData.name,country,region,
@@ -146,7 +141,7 @@ function getUserDataFromReq(req) {
       id, title,country,region,address,addedPhotos,description,
       perks,extraInfo,maxPeople,monthlyPrice,availability
     } = req.body;
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    jwt.verify("token123", jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       const placeDoc = await RentPlace.findById(id);
       if (userData.id === placeDoc.owner.toString()) {
@@ -165,7 +160,7 @@ function getUserDataFromReq(req) {
     try {
       const {token} = req.cookies;
   
-      jwt.verify(token, jwtSecret, {}, async (err, decodedUserData) => {
+      jwt.verify("token123", jwtSecret, {}, async (err, decodedUserData) => {
         const idObject = req.params.id;
 
         const deletedObject = await RentPlace.findByIdAndDelete(idObject); 

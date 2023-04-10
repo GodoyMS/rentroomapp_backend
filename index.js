@@ -18,7 +18,7 @@ app.use(session({
   secret: 'my-secret',
   resave: false,
   saveUninitialized: true,
-  cookie: {  secure: true, }
+  cookie: {  secure: false, }
 
 }));
 app.use(cors({

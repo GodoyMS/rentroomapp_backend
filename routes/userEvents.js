@@ -27,8 +27,7 @@ function getUserDataFromReq(req) {
 
   //Get user information
   router.get('/profile', async (req,res) => {
-    const token = req.cookies.token;
-    console.log(req,res)
+    const token = await req.cookies.token;
 
       if (token) {
         jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {

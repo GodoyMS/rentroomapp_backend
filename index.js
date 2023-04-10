@@ -17,6 +17,18 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Expose-Headers', 'Content-Length, X-JSON');
+  res.header('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Range');
+  res.header('Access-Control-Request-Headers', 'X-Requested-With, accept, content-type');
+  req.headers['x-forwarded-for'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  next();
+});
+
 
 //Define a route for uploading images
 app.use('/uploads', express.static(__dirname+'/uploads'));

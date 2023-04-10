@@ -4,34 +4,21 @@ const cors=require('cors');
 const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
 
 
-const store = new MongoDBStore({
-  uri: process.env.MONGO_SESSION_COLLECTION,
-  collection: 'sessions'
-});
+
 
 const app=express();
-//Database MONGODB with mongoose
-mongoose.connect(process.env.MONGO_URL,{
-  dbName: 'rentroomapp',
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
-app.set('trust proxy', true);
+
+app.set('trust proxy', 1);
 
 
 app.use(session({
   secret: 'my-secret',
   resave: false,
   saveUninitialized: true,
-  store: store,
-  cookie: {
-    secure: true,
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
-  }
+  cookie: {  secure: true, }
 
 }));
 app.use(cors({
@@ -67,11 +54,14 @@ const PORT=process.env.PORT || 4000;
 const userLogin=require('./routes/userLogin');
 const userEvents=require('./routes/userEvents');
 
+//Database MONGODB with mongoose
+mongoose.connect(process.env.MONGO_URL,{
+  dbName: 'rentroomapp',
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-//connect to MongoDB
-mongoose.connect(process.env.DB_CONNECT)
-    .then(()=>console.log('DB Connected'))
-    .catch(err=>console.log(err))
+
 
 //Use the routes;
 app.use('/',userLogin);

@@ -12,8 +12,7 @@ const dotenv=require('dotenv').config();
 
 const router = require('express').Router();
 const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg'
-const tokenValue='w4r5r3wq45wdfgw34';
-const options = { expiresIn: '1h' };
+
 
 
 function getUserDataFromReq(req) {

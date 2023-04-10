@@ -18,7 +18,7 @@ const options = { expiresIn: '1h' };
 
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
-      jwt.verify(tokenValue, jwtSecret, {}, async (err, decodedUserData) => {
+      jwt.verify(req.cookies.token, jwtSecret, {}, async (err, decodedUserData) => {
         if (err) throw err;
         resolve(decodedUserData);
       });
@@ -27,20 +27,21 @@ function getUserDataFromReq(req) {
 
 
   //Get user information
-  router.get('/profile', (req,res) => {
+  router.get('/profile', async (req,res) => {
     const token = req.cookies.token;
 
-      if (!token) {
-        return res.status(401).send('Unauthorized');
-      }
+      if (token) {
+        jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
+          if (err) { return res.json({ error: 'Authorization failed: Invalid token' })}
+          const {name,email,shortDescription,_id} = await User.findById(decodedUser.id);        
+          res.json({name,email,shortDescription,_id});
+        });
+        }else{
+          res.json('Unauthorized from profile endpoint')
 
-    
-      jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
-        if (err) { return res.status(401).json({ error: 'Authorization failed: Invalid token' })}
-        const {name,email,shortDescription,_id} = await User.findById(decodedUser.id);
-        
-        return res.status(200).json({name:name,email:email,shortDescription:shortDescription,_id:_id});
-      });
+      }
+          
+       
     
   });
 
@@ -190,12 +191,7 @@ function getUserDataFromReq(req) {
 
   //Post a favorite rentplace by user
   router.post('/account/postfavorite', async (req, res) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header('Access-Control-Allow-Credentials', 'include');
-    
-    // Set other headers and return the response
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.header('Access-Control-Allow-Methods', 'GET, POST');
+
     const userData = await getUserDataFromReq(req);
     const {
       rentPlace,name,monthlyPrice,

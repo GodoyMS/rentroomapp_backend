@@ -5,6 +5,8 @@ const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+
+
 const store = new MongoDBStore({
   uri: process.env.MONGO_SESSION_COLLECTION,
   collection: 'sessions'
@@ -25,7 +27,7 @@ app.use(session({
   saveUninitialized: true,
   store: store,
   cookie: {
-    secure: true,
+    secure: false,
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 

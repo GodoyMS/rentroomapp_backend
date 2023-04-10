@@ -4,21 +4,38 @@ const cors=require('cors');
 const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const RedisStore = require('connect-redis').default;
+const redis = require('redis');
+
+//Redis issue
+let redisClient = redis.createClient()
+redisClient.connect().catch(console.error)
 
 
 
+const redisStore =new RedisStore({
+  client: redisClient,
+  prefix: "myapp:",
+});
+//
 
 const app=express();
 
 
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 
+// const store = new MongoDBStore({
+//   uri: process.env.MONGO_SESSION_COLLECTION,
+//   collection: 'sessions'
+// });
 
 app.use(session({
   secret: 'my-secret',
   resave: false,
+  store:redisStore,
   saveUninitialized: true,
-  cookie: {  secure: false,httpOnly:false }
+  cookie: {   secure: process.env.NODE_ENV==! 'development',
+   }
 
 }));
 app.use(cors({

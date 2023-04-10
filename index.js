@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   store:redisStore,
   saveUninitialized: true,
-  cookie: {   secure: process.env.NODE_ENV==! 'development',
+  cookie: {   secure: true,
    }
 
 }));

@@ -3,6 +3,7 @@ const mongoose=require('mongoose');
 const cors=require('cors');
 const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 
 const app=express();
@@ -10,7 +11,12 @@ app.use(cors({
         origin:process.env.CLIENT_URL,
         credentials: true,}));
 app.use(express.json());
-app.use(cookieParser());
+app.use(session({
+  secret: 'my-secret',
+  resave: false,
+  saveUninitialized: true
+}));
+
 
 //Define a route for uploading images
 app.use('/uploads', express.static(__dirname+'/uploads'));

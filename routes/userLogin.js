@@ -6,7 +6,7 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 const dotenv=require('dotenv').config();
 
 
-const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg'
+const jwtSecret = process.env.jwtSecret
 const tokenValue='w4r5r3wq45wdfgw34';
 const options = { expiresIn: '1h' };
 
@@ -38,32 +38,27 @@ router.post('/register', async (req,res) => {
 router.post('/login', async (req,res) => {
   const {email,password} = req.body;
   const userDoc = await User.findOne({email});
-  if (userDoc) {
+  if (userDoc){
     const passOk = bcrypt.compareSync(password, userDoc.password);
     console.log(userDoc)
-    if (passOk) {
-      jwt.sign({email:userDoc.email, id:userDoc._id, name:userDoc.name}, jwtSecret, options, (err,token) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to generate token' });
-        }        
-        res.cookie('token', 'token123', { httpOnly: true});       
-        console.log(token) 
-        res.json(userDoc);
-
-      });
-    } else {  
-      res.status(422).json('pass not ok');
-    }
-  } else {
-    res.status(404).json('not found');
-  }
-});
+    if(passOk){
+      const token=jwt.sign({email:userDoc.email, id:userDoc._id, name:userDoc.name}, jwtSecret, options);
+        // Store JWT token in client-side storage
+        req.session.token = token;
+        res.json(userDoc)
+    } 
+  } 
+ }
+)
+    
+    
   
 
 //LOGOUT REQUEST
 
 router.post('/logout', (req,res) => {
-    res.cookie('token', '').json(true);
+  req.session.destroy();
+  res.send('Logged out successfully');
   });
   
 

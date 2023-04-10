@@ -30,7 +30,7 @@ function getUserDataFromReq(req) {
   //Get user information
   router.get('/profile', async (req,res) => {
       const token = await req.session.token;
-      console.log('token:',token)
+      console.log('token:',req.session)
 
       if (!token) {
         // JWT token is not present, so user is not authenticated

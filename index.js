@@ -4,18 +4,29 @@ const cors=require('cors');
 const dotenv=require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
+const MongoDBStore = require('connect-mongodb-session')(session);
+const store = new MongoDBStore({
+  uri: process.env.MONGO_SESSION_COLLECTION,
+  collection: 'sessions'
+});
 
 const app=express();
+app.use(session({
+  secret: 'my-secret',
+  resave: false,
+  saveUninitialized: true,
+  store: store,
+  cookie: {
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+
+}));
 app.use(cors({
         origin:process.env.CLIENT_URL,
         credentials: true,}));
 app.use(express.json());
-app.use(session({
-  secret: 'my-secret',
-  resave: false,
-  saveUninitialized: true
-}));
+
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin);

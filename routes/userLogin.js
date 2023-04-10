@@ -45,6 +45,7 @@ router.post('/login', async (req,res) => {
       const token=jwt.sign({email:userDoc.email, id:userDoc._id, name:userDoc.name}, jwtSecret, options);
         // Store JWT token in client-side storage
         req.session.token = token;
+        console.log(token,req.session)
         res.json(userDoc)
     } 
   } 

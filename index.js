@@ -20,6 +20,8 @@ mongoose.connect(process.env.MONGO_URL,{
   useUnifiedTopology: true
 });
 
+app.set('trust proxy', true);
+
 
 app.use(session({
   secret: 'my-secret',
@@ -27,7 +29,7 @@ app.use(session({
   saveUninitialized: true,
   store: store,
   cookie: {
-    secure: false,
+    secure: true,
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 

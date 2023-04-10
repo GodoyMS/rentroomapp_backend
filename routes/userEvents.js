@@ -33,7 +33,7 @@ function getUserDataFromReq(req) {
         jwt.verify(token, jwtSecret, {}, async (err, decodedUser) => {
           if (err) { return res.json({ error: 'Authorization failed: Invalid token' })}
           const {name,email,shortDescription,_id} = await User.findById(decodedUser.id);        
-          res.json({name,email,shortDescription,_id});
+          res.json({name,email,shortDescription,_id,token:token});
         });
         }else{
           res.json('Unauthorized from profile endpoint')

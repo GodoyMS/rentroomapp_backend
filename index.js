@@ -11,13 +11,21 @@ const store = new MongoDBStore({
 });
 
 const app=express();
+//Database MONGODB with mongoose
+mongoose.connect(process.env.MONGO_URL,{
+  dbName: 'rentroomapp',
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+
 app.use(session({
   secret: 'my-secret',
   resave: false,
   saveUninitialized: true,
   store: store,
   cookie: {
-    secure: false,
+    secure: true,
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 
@@ -46,12 +54,6 @@ app.use('/uploads', express.static(__dirname+'/uploads'));
 
 
 
-//Database MONGODB with mongoose
-mongoose.connect(process.env.MONGO_URL,{
-  dbName: 'rentroomapp',
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
 //PORTS
 const PORT=process.env.PORT || 4000;

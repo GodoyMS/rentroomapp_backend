@@ -8,7 +8,7 @@ const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 
 //Redis issue
-let redisClient = redis.createClient()
+let redisClient = redis.createClient({url:process.env.REDIS_URL})
 redisClient.connect().catch(console.error)
 
 

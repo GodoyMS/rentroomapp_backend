@@ -35,6 +35,9 @@ app.use(session({
   store:redisStore,
   saveUninitialized: true,
   cookie: {   secure: true,
+            httpOnly:false,
+            sameSite: 'none'
+
    }
 
 }));
